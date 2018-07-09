@@ -1,5 +1,7 @@
 package com.ia.dfms.documents;
 
+import java.time.ZonedDateTime;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -9,16 +11,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Document
-public class Artifact {
+public class RequestTracking {
     @Id
     private String id;
-    private String description;
-    private String uri;
     @DBRef
-    private Organization organization;
+    private Request  request;
+    private String observation;
+    @DBRef
+    private Resource manager;
+    private ZonedDateTime trackingTime;
+    private RequestStatus requestStatus;
 }
