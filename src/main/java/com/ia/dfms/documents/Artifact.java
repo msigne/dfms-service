@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import reactor.core.publisher.Mono;
 
 @Data
 @Builder
@@ -17,9 +16,9 @@ import reactor.core.publisher.Mono;
 @Document(collection = "Artifacts")
 public class Artifact {
     @Id
-    private Mono<String> id;
-    private Mono<String> description;
-    private Mono<String> uri;
+    private String id;
+    private String description;
+    private String uri;
     @DBRef
-    private Mono<Organization> organization;
+    private Organization organization;
 }

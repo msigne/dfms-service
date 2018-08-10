@@ -4,6 +4,8 @@ import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 
 import com.ia.dfms.documents.Task;
 
-public interface TaskRepository  extends ReactiveMongoRepository<Task, String>{
+import reactor.core.publisher.Flux;
 
+public interface TaskRepository extends ReactiveMongoRepository<Task, String> {
+    Flux<Task> findByOrganization_Id(String organizationId);
 }

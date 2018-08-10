@@ -1,5 +1,6 @@
 package com.ia.dfms.documents;
 
+import java.util.Collections;
 import java.util.Map;
 
 import org.springframework.data.annotation.Id;
@@ -9,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import reactor.core.publisher.Mono;
 
 @Builder
 @AllArgsConstructor
@@ -18,8 +18,8 @@ import reactor.core.publisher.Mono;
 @Data
 public class Organization {
     @Id
-    private Mono<String> id;
-    private Mono<String> name;
+    private String id;
+    private String name;
     @Builder.Default
-    private Mono<Map<String, Object>> details = Mono.empty();
+    private Map<String, Object> details = Collections.emptyMap();
 }

@@ -5,7 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.ia.dfms.documents.Artifact;
 
-@Repository
-public interface ArtifactRepository extends ReactiveMongoRepository<Artifact, String>{
+import reactor.core.publisher.Flux;
 
+@Repository
+public interface ArtifactRepository extends ReactiveMongoRepository<Artifact, String> {
+    Flux<Artifact> findByOrganization_Id(String organizationId);
 }

@@ -1,6 +1,8 @@
 package com.ia.dfms.documents;
 
 import java.time.ZonedDateTime;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 import org.springframework.data.annotation.Id;
@@ -11,8 +13,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @Data
 @Builder
@@ -21,20 +21,20 @@ import reactor.core.publisher.Mono;
 @Document(collection = "Requests")
 public class Request {
     @Id
-    private Mono<String> id;
-    private Mono<Task> task;
+    private String id;
+    private Task task;
     @DBRef
-    private Mono<Resource> requester;
-    private Mono<ZonedDateTime> requestDate;
+    private Resource requester;
+    private ZonedDateTime requestDate;
     @Builder.Default
-    private Mono<Map<String, Object>> requestDetails = Mono.empty();
+    private Map<String, Object> requestDetails = Collections.emptyMap();
     private RequestStatus requestStatus;
     @Builder.Default
-    private Flux<RequestTracking> steps = Flux.empty();
+    private Collection<RequestTracking> steps = Collections.emptyList();
     @Builder.Default
-    private Flux<Artifact> artifacts = Flux.empty();
+    private Collection<Artifact> artifacts = Collections.emptyList();
 
     public boolean isCompleted() {
-        return steps.toStream().anyMatch(s -> RequestStatus.CANCELED.equals(s.getRequestStatus()) || RequestStatus.COMPLETED.equals(s.getRequestStatus()));
+        return steps.stream().anyMatch(s -> RequestStatus.CANCELED.equals(s.getRequestStatus()) || RequestStatus.COMPLETED.equals(s.getRequestStatus()));
     }
 }

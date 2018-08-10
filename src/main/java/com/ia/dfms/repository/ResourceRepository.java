@@ -5,7 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.ia.dfms.documents.Resource;
 
-@Repository
-public interface ResourceRepository extends ReactiveMongoRepository<Resource, String>{
+import reactor.core.publisher.Flux;
 
+@Repository
+public interface ResourceRepository extends ReactiveMongoRepository<Resource, String> {
+    Flux<Resource> findByOrganization_Id(String organizationId);
 }

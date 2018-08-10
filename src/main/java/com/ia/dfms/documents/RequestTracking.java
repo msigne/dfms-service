@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import reactor.core.publisher.Mono;
 
 @Builder
 @AllArgsConstructor
@@ -19,12 +18,12 @@ import reactor.core.publisher.Mono;
 @Document(collection = "RequestTrackings")
 public class RequestTracking {
     @Id
-    private Mono<String> id;
+    private String id;
     @DBRef
-    private Mono<Request> request;
-    private Mono<String> observation;
+    private Request request;
+    private String observation;
     @DBRef
-    private Mono<Resource> manager;
-    private Mono<ZonedDateTime> trackingTime;
+    private Resource manager;
+    private ZonedDateTime trackingTime;
     private RequestStatus requestStatus;
-}
+ }

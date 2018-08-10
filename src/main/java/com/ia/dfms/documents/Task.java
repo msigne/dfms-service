@@ -22,9 +22,9 @@ public class Task {
     private String id;
     private String description;
     @Builder.Default
-    private Collection<Request> requests = Collections.unmodifiableList(Collections.emptyList());
+    private Collection<Request> requests = Collections.emptyList();
     @Builder.Default
-    private Collection<Artifact> artifacts = Collections.unmodifiableList(Collections.emptyList());
+    private Collection<Artifact> artifacts = Collections.emptyList();
     @DBRef
     private Organization organization;
 }
