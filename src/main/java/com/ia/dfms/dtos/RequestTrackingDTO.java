@@ -1,10 +1,8 @@
-package com.ia.dfms.documents;
+package com.ia.dfms.dtos;
 
 import java.time.ZonedDateTime;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
+import com.ia.dfms.documents.RequestStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,19 +10,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import reactor.core.publisher.Mono;
 
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-@Document(collection = "RequestTrackings")
-public class RequestTracking {
-    @Id
+public class RequestTrackingDTO {
     private Mono<String> id;
-    @DBRef
-    private Mono<Request> request;
+    private Mono<String> requestId;
     private Mono<String> observation;
-    @DBRef
-    private Mono<Resource> manager;
+    private Mono<String> managerId;
     private Mono<ZonedDateTime> trackingTime;
     private RequestStatus requestStatus;
 }

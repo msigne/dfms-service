@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document
+@Document(collection = "Tasks")
 public class Task {
     @Id
     private String id;

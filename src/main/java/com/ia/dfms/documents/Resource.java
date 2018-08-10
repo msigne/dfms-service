@@ -1,7 +1,5 @@
 package com.ia.dfms.documents;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
 import org.springframework.data.annotation.Id;
@@ -12,22 +10,24 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document
+@Document(collection = "Resources")
 public class Resource {
     @Id
-    private String id;
-    private String description;
-    private String email;
-    private String phoneNumer;
+    private Mono<String> id;
+    private Mono<String> description;
+    private Mono<String> email;
+    private Mono<String> phoneNumer;
     @Builder.Default
-    private Map<String, Object> details = Collections.unmodifiableMap(Collections.emptyMap());
+    private Mono<Map<String, Object>> details = Mono.empty();
     @Builder.Default
-    private Collection<RequestTracking> steps = Collections.unmodifiableList(Collections.emptyList());
+    private Flux<RequestTracking> steps = Flux.empty();
     @DBRef
-    private Organization organization;
+    private Mono<Organization> organization;
 }
