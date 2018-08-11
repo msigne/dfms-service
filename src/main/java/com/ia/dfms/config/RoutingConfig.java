@@ -1,11 +1,18 @@
 package com.ia.dfms.config;
 
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
+import static org.springframework.web.reactive.function.server.RequestPredicates.method;
+import static org.springframework.web.reactive.function.server.RequestPredicates.path;
+import static org.springframework.web.reactive.function.server.RouterFunctions.nest;
+import static org.springframework.web.reactive.function.server.RouterFunctions.route;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.reactive.config.EnableWebFlux;
-import org.springframework.web.reactive.function.server.RequestPredicates;
 import org.springframework.web.reactive.function.server.RouterFunction;
-import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 import com.ia.dfms.handlers.RequestHandler;
@@ -17,26 +24,30 @@ public class RoutingConfig {
 
     @Bean
     RouterFunction<ServerResponse> requestRoutes(RequestHandler handler) {
-        return RouterFunctions.route(RequestPredicates.POST("/requests"), handler::requestAdd)
-                .andRoute(RequestPredicates.GET("/requests/{requestId}"), handler::requestGet)
-                .andRoute(RequestPredicates.GET("/requests/{requestId}/histories"), handler::historyByRequest)
-                .andRoute(RequestPredicates.GET("/requests/resources/{resourceId}/histories"), handler::historyByResource);
+        /* @formatter:off */
+        return nest(path("/requests"),route(method(POST), handler::requestAdd)
+                .andRoute(GET("/{requestId}"), handler::requestGet)
+                .andRoute(GET("/{requestId}/histories"), handler::historyByRequest)
+                .andRoute(GET("/resources/{resourceId}/histories"),handler::historyByResource));
+       /* @formatter:on */
     }
 
     @Bean
     RouterFunction<ServerResponse> resourceRoutes(ResourceHandler handler) {
-        return RouterFunctions.route(RequestPredicates.POST("/resources"), handler::resourceAdd)
-                .andRoute(RequestPredicates.GET("/resources/{resourceId}"), handler::resourceGet)
-                .andRoute(RequestPredicates.GET("/resources/organizations/{organizationId}"), handler::resourceGetByOrganization)
-                .andRoute(RequestPredicates.POST("/artifacts"), handler::artifactAdd)
-                .andRoute(RequestPredicates.GET("/artifacts/{artifactId}"), handler::artifactGet)
-                .andRoute(RequestPredicates.GET("/artifacts/organizations/{organizationId}"), handler::artifactGetByOrganization)
-                .andRoute(RequestPredicates.POST("/organizations"), handler::organisationAdd)
-                .andRoute(RequestPredicates.GET("/organizations/{organizationId}"), handler::organisationGet)
-                .andRoute(RequestPredicates.GET("/organisations"), handler::organisationGetAll)
-                .andRoute(RequestPredicates.POST("/tasks"), handler::taskAdd)
-                .andRoute(RequestPredicates.GET("/tasks/{taskId}"), handler::taskGet)
-                .andRoute(RequestPredicates.GET("/tasks/organisations/{organizationId}"), handler::taskGetByOrganization);
+        /* @formatter:off */
+        return nest(path("/resources"),route(method(POST), handler::resourceAdd)
+                    .andRoute(GET("/{resourceId}"), handler::resourceGet)
+                    .andRoute(GET("/organizations/{organizationId}"), handler::resourceGetByOrganization))
+               .andNest(path("/artifacts"),route(method(POST), handler::artifactAdd)
+                    .andRoute(GET("/{artifactId}"), handler::artifactGet)
+                    .andRoute(GET("/organizations/{organizationId}"), handler::artifactGetByOrganization))
+               .andNest(path("/organizations"), route(method(HttpMethod.POST), handler::organisationAdd)
+                    .andRoute(GET("/{organizationId}"), handler::organisationGet)
+                    .andRoute(method(GET), handler::organisationGetAll))
+               .andNest(path("/tasks"), route(method(HttpMethod.POST), handler::taskAdd)
+                    .andRoute(GET("/{taskId}"), handler::taskGet)
+                    .andRoute(GET("/organisations/{organizationId}"), handler::taskGetByOrganization));
+        /* @formatter:on */
     }
 
 }
