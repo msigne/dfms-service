@@ -2,10 +2,11 @@ package com.ia.dfms;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.RestController;
+
+import io.github.kaiso.relmongo.config.EnableRelationalMongo;
 
 @SpringBootApplication
-@RestController
+@EnableRelationalMongo
 public class DfmsApplication {
 
     public static void main(String[] args) {

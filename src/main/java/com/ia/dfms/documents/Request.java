@@ -9,6 +9,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import io.github.kaiso.relmongo.annotation.JoinProperty;
+import io.github.kaiso.relmongo.annotation.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,8 +32,12 @@ public class Request {
     private Map<String, Object> requestDetails = Collections.emptyMap();
     private RequestStatus requestStatus;
     @Builder.Default
+    @OneToMany
+    @JoinProperty(name="steps")
     private Collection<RequestTracking> steps = Collections.emptyList();
     @Builder.Default
+    @OneToMany
+    @JoinProperty(name="artifacts")
     private Collection<Artifact> artifacts = Collections.emptyList();
 
     public boolean isCompleted() {

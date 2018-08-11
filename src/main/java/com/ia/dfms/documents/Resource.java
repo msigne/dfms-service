@@ -8,6 +8,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import io.github.kaiso.relmongo.annotation.JoinProperty;
+import io.github.kaiso.relmongo.annotation.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,6 +29,8 @@ public class Resource {
     @Builder.Default
     private Map<String, Object> details = Collections.emptyMap();
     @Builder.Default
+    @OneToMany
+    @JoinProperty(name="steps")
     private Collection<RequestTracking> steps = Collections.emptyList();
     @DBRef
     private Organization organization;
