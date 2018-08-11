@@ -23,7 +23,6 @@ public class RequestConverter implements Converter<RequestDTO, Request> {
 
     @Override
     public Mono<Request> convert(Mono<RequestDTO> source) {
-
         final RequestDTO s = source.block();
         final Collection<Artifact> artifacts =
                 s.getArtifacts().stream().map(a -> artifactRepository.findById(a.getId()).block()).collect(Collectors.toList());

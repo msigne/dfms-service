@@ -23,7 +23,7 @@ public class Resource {
     private String id;
     private String description;
     private String email;
-    private String phoneNumer;
+    private String phoneNumber;
     @Builder.Default
     private Map<String, Object> details = Collections.emptyMap();
     @Builder.Default
