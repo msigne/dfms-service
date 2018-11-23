@@ -33,5 +33,5 @@ public class Resource {
     @JoinProperty(name="steps")
     private Collection<RequestTracking> steps = Collections.emptyList();
     @DBRef
-    private Organization organization;
+    private Company company;
 }

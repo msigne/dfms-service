@@ -37,12 +37,12 @@ public class ResourceConverter implements Converter<ResourceDTO, Resource> {
             }).collect(Collectors.toList());
             final Resource.ResourceBuilder rsb = Resource.builder().id(s.getId()).description(s.getDescription()).details(s.getDetails())
                     .email(s.getEmail()).phoneNumber(s.getPhoneNumber()).steps(steps);
-            return resourceService.organizationGet(s.getOrganizationId()).map(o -> rsb.organization(o).build());
+            return resourceService.organizationGet(s.getCompanyId()).map(o -> rsb.company(o).build());
         });
     }
 
     @Override
     public Mono<ResourceDTO> reverse(Mono<Resource> source) {
-        return source.map(s -> ResourceDTO.of(s));
+        return source.map(s -> ResourceDTO.of(s).build());
     }
 }

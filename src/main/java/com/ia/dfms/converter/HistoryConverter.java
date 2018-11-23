@@ -17,8 +17,7 @@ public class HistoryConverter implements Converter<RequestTracking, RequestTrack
     @Override
     public Mono<RequestTrackingDTO> convert(Mono<RequestTracking> source) {
         return source.map(s -> {
-            return RequestTrackingDTO.builder().id(s.getId()).managerId(s.getManager().getId()).observation(s.getObservation())
-                    .requestId(s.getRequest().getId()).requestStatus(s.getRequestStatus()).trackingTime(s.getTrackingTime()).build();
+            return RequestTrackingDTO.of(s).build();
         });
     }
 

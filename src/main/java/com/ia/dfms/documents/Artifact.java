@@ -20,5 +20,5 @@ public class Artifact {
     private String description;
     private String uri;
     @DBRef
-    private Organization organization;
+    private Company company;
 }

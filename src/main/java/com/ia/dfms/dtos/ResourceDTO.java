@@ -26,20 +26,14 @@ public class ResourceDTO {
     private Map<String, Object> details = Collections.emptyMap();
     @Builder.Default
     private Collection<RequestTrackingDTO> steps = Collections.emptyList();
-    
-    private String organizationId;
-    
-    public static ResourceDTO of(Resource req) {
+
+    private String companyId;
+
+    public static ResourceDTOBuilder of(Resource req) {
         final Collection<RequestTracking> tr = req.getSteps();
-        final Collection<RequestTrackingDTO> trdtos = tr == null ? Collections.emptyList() : tr.stream().map(RequestTrackingDTO::of).collect(Collectors.toList());
-        return ResourceDTO.builder()
-                .id(req.getId())
-                .description(req.getDescription())
-                .details(req.getDetails())
-                .email(req.getEmail())
-                .phoneNumber(req.getPhoneNumber())
-                .steps(trdtos)
-                .organizationId(req.getOrganization().getId())
-                .build();
+        final Collection<RequestTrackingDTO> trdtos =
+                tr == null ? Collections.emptyList() : tr.stream().map(r -> RequestTrackingDTO.of(r).build()).collect(Collectors.toList());
+        return ResourceDTO.builder().id(req.getId()).description(req.getDescription()).details(req.getDetails()).email(req.getEmail())
+                .phoneNumber(req.getPhoneNumber()).steps(trdtos).companyId(req.getCompany().getId());
     }
 }

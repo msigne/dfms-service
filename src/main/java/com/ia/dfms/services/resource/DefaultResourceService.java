@@ -3,7 +3,7 @@ package com.ia.dfms.services.resource;
 import org.springframework.stereotype.Component;
 
 import com.ia.dfms.documents.Artifact;
-import com.ia.dfms.documents.Organization;
+import com.ia.dfms.documents.Company;
 import com.ia.dfms.documents.Resource;
 import com.ia.dfms.documents.Task;
 import com.ia.dfms.repository.ArtifactRepository;
@@ -36,7 +36,7 @@ public class DefaultResourceService implements ResourceService {
 
     @Override
     public Flux<Resource> resourceGetByOrganization(String organizationId) {
-        return resourceRepository.findByOrganization_Id(organizationId);
+        return resourceRepository.findByCompany_Id(organizationId);
     }
 
     @Override
@@ -51,27 +51,27 @@ public class DefaultResourceService implements ResourceService {
 
     @Override
     public Flux<Artifact> artifactGetByOrganization(String organizationId) {
-        return artifactRepository.findByOrganization_Id(organizationId);
+        return artifactRepository.findByCompany_Id(organizationId);
     }
 
     @Override
-    public Mono<Organization> organizationAdd(Mono<Organization> organization) {
-        return organization.flatMap(o -> organizationRepository.save(o));
+    public Mono<Company> organizationAdd(Mono<Company> company) {
+        return company.flatMap(o -> organizationRepository.save(o));
     }
 
     @Override
-    public Mono<Organization> organizationGet(String organizationId) {
+    public Mono<Company> organizationGet(String organizationId) {
         return organizationRepository.findById(organizationId);
     }
 
     @Override
-    public Flux<Organization> organizationGet() {
+    public Flux<Company> organizationGet() {
         return organizationRepository.findAll();
     }
 
     @Override
     public Mono<Task> taskAdd(Mono<Task> task) {
-        return task.flatMap(t -> taskRepository.save(t));
+        return task.doOnNext(t -> taskRepository.save(t));
     }
 
     @Override
@@ -81,6 +81,6 @@ public class DefaultResourceService implements ResourceService {
 
     @Override
     public Flux<Task> taskGetByOrganization(String organizationId) {
-        return taskRepository.findByOrganization_Id(organizationId);
+        return taskRepository.findByCompany_Id(organizationId);
     }
 }

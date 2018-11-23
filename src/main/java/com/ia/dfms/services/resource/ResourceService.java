@@ -1,7 +1,7 @@
 package com.ia.dfms.services.resource;
 
 import com.ia.dfms.documents.Artifact;
-import com.ia.dfms.documents.Organization;
+import com.ia.dfms.documents.Company;
 import com.ia.dfms.documents.Resource;
 import com.ia.dfms.documents.Task;
 
@@ -22,11 +22,11 @@ public interface ResourceService {
 
     Flux<Artifact> artifactGetByOrganization(String organizationId);
 
-    Mono<Organization> organizationAdd(Mono<Organization> organization);
+    Mono<Company> organizationAdd(Mono<Company> company);
 
-    Mono<Organization> organizationGet(String organizationId);
+    Mono<Company> organizationGet(String organizationId);
 
-    Flux<Organization> organizationGet();
+    Flux<Company> organizationGet();
     
     Mono<Task> taskAdd(Mono<Task> task);
 

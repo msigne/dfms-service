@@ -6,10 +6,12 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 
 import com.ia.dfms.converter.Converter;
 import com.ia.dfms.documents.Artifact;
-import com.ia.dfms.documents.Organization;
+import com.ia.dfms.documents.Company;
 import com.ia.dfms.documents.Resource;
 import com.ia.dfms.documents.Task;
+import com.ia.dfms.dtos.ArtifactDTO;
 import com.ia.dfms.dtos.ResourceDTO;
+import com.ia.dfms.dtos.TaskDTO;
 import com.ia.dfms.services.resource.ResourceService;
 
 import lombok.AllArgsConstructor;
@@ -21,6 +23,8 @@ import reactor.core.publisher.Mono;
 public class ResourceHandler {
     private final ResourceService resourceService;
     private final Converter<ResourceDTO, Resource> resourceConverter;
+    private final Converter<TaskDTO, Task> taskConverter;
+    private final Converter<ArtifactDTO, Artifact> artifactConverter;
 
     public Mono<ServerResponse> resourceAdd(ServerRequest request) {
         final Mono<ResourceDTO> dto = request.bodyToMono(ResourceDTO.class);
@@ -36,60 +40,62 @@ public class ResourceHandler {
     }
 
     public Mono<ServerResponse> resourceGetByOrganization(ServerRequest request) {
-        final String organizationId = request.pathVariable("organizationId");
-        final Flux<ResourceDTO> dtos = resourceConverter.reverse(resourceService.resourceGetByOrganization(organizationId));
+        final String companyId = request.pathVariable("companyId");
+        final Flux<ResourceDTO> dtos = resourceConverter.reverse(resourceService.resourceGetByOrganization(companyId));
         return ServerResponse.ok().body(dtos, ResourceDTO.class);
     }
 
     public Mono<ServerResponse> artifactAdd(ServerRequest request) {
-        final Mono<Artifact> dto = request.bodyToMono(Artifact.class);
-        final Mono<Artifact> a = resourceService.artifactAdd(dto);
-        return ServerResponse.ok().body(a, Artifact.class);
+        final Mono<ArtifactDTO> dto = request.bodyToMono(ArtifactDTO.class);
+        final Mono<Artifact> a = resourceService.artifactAdd(artifactConverter.convert(dto));
+        return ServerResponse.ok().body(artifactConverter.reverse(a), ArtifactDTO.class);
     }
 
     public Mono<ServerResponse> artifactGet(ServerRequest request) {
         final String artifactId = request.pathVariable("artifactId");
         final Mono<Artifact> a = resourceService.artifactGet(artifactId);
-        return ServerResponse.ok().body(a, Artifact.class);
+        return ServerResponse.ok().body(artifactConverter.reverse(a), ArtifactDTO.class);
     }
 
     public Mono<ServerResponse> artifactGetByOrganization(ServerRequest request) {
-        final String organizationId = request.pathVariable("organizationId");
-        final Flux<Artifact> dtos = resourceService.artifactGetByOrganization(organizationId);
-        return ServerResponse.ok().body(dtos, Artifact.class);
+        final String companyId = request.pathVariable("companyId");
+        final Flux<Artifact> dtos = resourceService.artifactGetByOrganization(companyId);
+        return ServerResponse.ok().body(artifactConverter.reverse(dtos), ArtifactDTO.class);
     }
 
     public Mono<ServerResponse> organisationAdd(ServerRequest request) {
-        final Mono<Organization> dto = request.bodyToMono(Organization.class);
-        final Mono<Organization> o = resourceService.organizationAdd(dto);
-        return ServerResponse.ok().body(o, Organization.class);
+        final Mono<Company> dto = request.bodyToMono(Company.class);
+        final Mono<Company> o = resourceService.organizationAdd(dto);
+        return ServerResponse.ok().body(o, Company.class);
     }
 
     public Mono<ServerResponse> organisationGet(ServerRequest request) {
-        final String organizationId = request.pathVariable("organizationId");
-        final Mono<Organization> o = resourceService.organizationGet(organizationId);
-        return ServerResponse.ok().body(o, Organization.class);
+        final String companyId = request.pathVariable("companyId");
+        final Mono<Company> o = resourceService.organizationGet(companyId);
+        return ServerResponse.ok().body(o, Company.class);
     }
 
     public Mono<ServerResponse> organisationGetAll(ServerRequest request) {
-        return ServerResponse.ok().body(resourceService.organizationGet(), Organization.class);
+        return ServerResponse.ok().body(resourceService.organizationGet(), Company.class);
     }
 
     public Mono<ServerResponse> taskAdd(ServerRequest request) {
-        final Mono<Task> dto = request.bodyToMono(Task.class);
-        final Mono<Task> t = resourceService.taskAdd(dto);
-        return ServerResponse.ok().body(t, Task.class);
+        final Mono<TaskDTO> dto = request.bodyToMono(TaskDTO.class);
+        return taskConverter.convert(dto).map(task -> resourceService.taskAdd(Mono.just(task))).flatMap(r->{
+            return ServerResponse.ok().body(taskConverter.reverse(r), TaskDTO.class);
+        });
+        
     }
 
     public Mono<ServerResponse> taskGet(ServerRequest request) {
         final String taskId = request.pathVariable("taskId");
         final Mono<Task> o = resourceService.taskGet(taskId);
-        return ServerResponse.ok().body(o, Task.class);
+        return ServerResponse.ok().body(taskConverter.reverse(o), TaskDTO.class);
     }
 
     public Mono<ServerResponse> taskGetByOrganization(ServerRequest request) {
-        final String organizationId = request.pathVariable("organizationId");
-        final Flux<Task> dtos = resourceService.taskGetByOrganization(organizationId);
-        return ServerResponse.ok().body(dtos, Task.class);
+        final String companyId = request.pathVariable("companyId");
+        final Flux<Task> dtos = resourceService.taskGetByOrganization(companyId);
+        return ServerResponse.ok().body(taskConverter.reverse(dtos), TaskDTO.class);
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import io.github.kaiso.relmongo.annotation.CascadeType;
 import io.github.kaiso.relmongo.annotation.JoinProperty;
 import io.github.kaiso.relmongo.annotation.OneToMany;
 import lombok.AllArgsConstructor;
@@ -25,12 +26,12 @@ public class Task {
     private String description;
     @Builder.Default
     @OneToMany
-    @JoinProperty(name="requests")
+    @JoinProperty(name = "requests")
     private Collection<Request> requests = Collections.emptyList();
     @Builder.Default
-    @OneToMany
-    @JoinProperty(name="artifacts")
+    @OneToMany(cascade = CascadeType.PERSIST)
+    @JoinProperty(name = "artifacts")
     private Collection<Artifact> artifacts = Collections.emptyList();
     @DBRef
-    private Organization organization;
+    private Company company;
 }

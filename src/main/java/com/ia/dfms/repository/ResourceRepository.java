@@ -9,5 +9,5 @@ import reactor.core.publisher.Flux;
 
 @Repository
 public interface ResourceRepository extends ReactiveMongoRepository<Resource, String> {
-    Flux<Resource> findByOrganization_Id(String organizationId);
+    Flux<Resource> findByCompany_Id(String organizationId);
 }

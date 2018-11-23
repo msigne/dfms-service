@@ -22,8 +22,8 @@ public class RequestTrackingDTO {
     private ZonedDateTime trackingTime;
     private RequestStatus requestStatus;
 
-    public static RequestTrackingDTO of(RequestTracking r) {
+    public static RequestTrackingDTOBuilder of(RequestTracking r) {
         return RequestTrackingDTO.builder().id(r.getId()).managerId(r.getManager().getId()).observation(r.getObservation())
-                .requestId(r.getRequest().getId()).requestStatus(r.getRequestStatus()).trackingTime(r.getTrackingTime()).build();
+                .requestId(r.getRequest().getId()).requestStatus(r.getRequestStatus()).trackingTime(r.getTrackingTime());
     }
 }

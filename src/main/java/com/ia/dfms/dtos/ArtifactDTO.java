@@ -15,14 +15,9 @@ public class ArtifactDTO {
     private String id;
     private String description;
     private String uri;
-    private String organizationId;
+    private String companyId;
 
-    public static ArtifactDTO of(Artifact a) {
-        return ArtifactDTO.builder()
-                .description(a.getDescription())
-                .id(a.getId())
-                .organizationId(a.getOrganization().getId())
-                .uri(a.getUri())
-                .build();
+    public static ArtifactDTOBuilder of(Artifact a) {
+        return ArtifactDTO.builder().description(a.getDescription()).id(a.getId()).companyId(a.getCompany().getId()).uri(a.getUri());
     }
 }

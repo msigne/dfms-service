@@ -31,19 +31,11 @@ public class RequestDTO {
     @Builder.Default
     private Collection<ArtifactDTO> artifacts = Collections.emptyList();
 
-    public static RequestDTO of(Request req) {
+    public static RequestDTOBuilder of(Request req) {
 
-        final Collection<RequestTrackingDTO> trdtos = req.getSteps().stream().map(RequestTrackingDTO::of).collect(Collectors.toList());
-        final Collection<ArtifactDTO> adtos = req.getArtifacts().stream().map(ArtifactDTO::of).collect(Collectors.toList());
-        return RequestDTO.builder()
-                .id(req.getId())
-                .taskId(req.getTask().getId())
-                .resourceId(req.getRequester().getId())
-                .requestDate(req.getRequestDate())
-                .requestDetails(req.getRequestDetails())
-                .requestStatus(req.getRequestStatus())
-                .steps(trdtos)
-                .artifacts(adtos)
-                .build();
+        final Collection<RequestTrackingDTO> trdtos = req.getSteps().stream().map(r -> RequestTrackingDTO.of(r).build()).collect(Collectors.toList());
+        final Collection<ArtifactDTO> adtos = req.getArtifacts().stream().map(a -> ArtifactDTO.of(a).build()).collect(Collectors.toList());
+        return RequestDTO.builder().id(req.getId()).taskId(req.getTask().getId()).resourceId(req.getRequester().getId()).requestDate(req.getRequestDate())
+                .requestDetails(req.getRequestDetails()).requestStatus(req.getRequestStatus()).steps(trdtos).artifacts(adtos);
     }
 }

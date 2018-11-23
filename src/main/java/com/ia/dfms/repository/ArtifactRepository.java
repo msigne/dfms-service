@@ -9,5 +9,5 @@ import reactor.core.publisher.Flux;
 
 @Repository
 public interface ArtifactRepository extends ReactiveMongoRepository<Artifact, String> {
-    Flux<Artifact> findByOrganization_Id(String organizationId);
+    Flux<Artifact> findByCompany_Id(String organizationId);
 }
