@@ -14,22 +14,24 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = {"artifacts", "requests"})
 @Document(collection = "Tasks")
 public class Task {
     @Id
     private String id;
     private String description;
     @Builder.Default
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinProperty(name = "requests")
     private Collection<Request> requests = Collections.emptyList();
     @Builder.Default
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinProperty(name = "artifacts")
     private Collection<Artifact> artifacts = Collections.emptyList();
     @DBRef

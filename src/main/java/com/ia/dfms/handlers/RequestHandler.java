@@ -25,7 +25,8 @@ public class RequestHandler {
 
     public Mono<ServerResponse> requestAdd(ServerRequest request) {
         final Mono<RequestDTO> dto = request.bodyToMono(RequestDTO.class);
-        final Mono<Request> r = requestService.requestAdd(requestConverter.convert(dto));
+        final Mono<Request> rq = requestConverter.convert(dto);
+        final Mono<Request> r = requestService.requestAdd(rq);
         return ServerResponse.ok().body(requestConverter.reverse(r), RequestDTO.class);
     }
 

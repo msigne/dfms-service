@@ -1,10 +1,12 @@
 package com.ia.dfms.dtos;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.ia.dfms.documents.Request;
 import com.ia.dfms.documents.RequestStatus;
@@ -22,7 +24,8 @@ public class RequestDTO {
     private String id;
     private String taskId;
     private String resourceId;
-    private ZonedDateTime requestDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime requestDate;
     @Builder.Default
     private Map<String, Object> requestDetails = Collections.emptyMap();
     private RequestStatus requestStatus;

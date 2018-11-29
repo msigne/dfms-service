@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Builder
 @Data
@@ -27,6 +28,7 @@ public class ResourceDTO {
     @Builder.Default
     private Collection<RequestTrackingDTO> steps = Collections.emptyList();
 
+    @NonNull
     private String companyId;
 
     public static ResourceDTOBuilder of(Resource req) {

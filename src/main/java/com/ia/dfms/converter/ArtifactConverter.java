@@ -17,7 +17,7 @@ public class ArtifactConverter implements Converter<ArtifactDTO, Artifact> {
     @Override
     public Mono<Artifact> convert(Mono<ArtifactDTO> source) {
         return source.flatMap(s -> {
-            return resourceService.organizationGet(s.getCompanyId()).map(c->{               
+            return resourceService.organizationGet(s.getCompanyId()).map(c -> {
                 return Artifact.builder().company(c).id(s.getId()).description(s.getDescription()).uri(s.getUri()).build();
             });
         });

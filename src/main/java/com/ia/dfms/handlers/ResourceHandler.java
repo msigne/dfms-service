@@ -81,10 +81,9 @@ public class ResourceHandler {
 
     public Mono<ServerResponse> taskAdd(ServerRequest request) {
         final Mono<TaskDTO> dto = request.bodyToMono(TaskDTO.class);
-        return taskConverter.convert(dto).map(task -> resourceService.taskAdd(Mono.just(task))).flatMap(r->{
+        return taskConverter.convert(dto).map(task -> resourceService.taskAdd(Mono.just(task))).flatMap(r -> {
             return ServerResponse.ok().body(taskConverter.reverse(r), TaskDTO.class);
         });
-        
     }
 
     public Mono<ServerResponse> taskGet(ServerRequest request) {

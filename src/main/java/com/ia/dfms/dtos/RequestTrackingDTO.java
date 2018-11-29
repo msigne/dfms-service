@@ -1,6 +1,6 @@
 package com.ia.dfms.dtos;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 import com.ia.dfms.documents.RequestStatus;
 import com.ia.dfms.documents.RequestTracking;
@@ -19,7 +19,7 @@ public class RequestTrackingDTO {
     private String requestId;
     private String observation;
     private String managerId;
-    private ZonedDateTime trackingTime;
+    private LocalDateTime trackingTime;
     private RequestStatus requestStatus;
 
     public static RequestTrackingDTOBuilder of(RequestTracking r) {

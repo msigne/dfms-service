@@ -1,6 +1,6 @@
 package com.ia.dfms.documents;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -21,6 +21,6 @@ public class RequestTracking {
     private Request request;
     private String observation;
     private Resource manager;
-    private ZonedDateTime trackingTime;
+    private LocalDateTime trackingTime;
     private RequestStatus requestStatus;
  }

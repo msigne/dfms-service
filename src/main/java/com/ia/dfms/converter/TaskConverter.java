@@ -1,7 +1,6 @@
 package com.ia.dfms.converter;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
 
@@ -27,24 +26,21 @@ public class TaskConverter implements Converter<TaskDTO, Task> {
 
     @Override
     public Mono<Task> convert(Mono<TaskDTO> source) {
-        final Collection<Artifact> artifacts = new ArrayList<>();
-        final Collection<Request> requests = new ArrayList<>();
-         /*source.flatMap(s -> {
-            return resourceService.organizationGet(s.getCompanyId()).map(c -> {
-                Flux<Artifact> ars = artifactConverter.convert(Flux.fromIterable(s.getArtifacts()));
-                ars.buffer().map(artifacts::addAll).flatMap(ss -> requestConverter.convert(Flux.fromIterable(s.getRequests()))).buffer()
-                        .map(requests::addAll).subscribe(b -> System.out.println("result of artifacts: " + artifacts));
-                return Task.builder().artifacts(artifacts).company(c).description(s.getDescription()).id(s.getId()).requests(requests).build();
+        return source.flatMap(s -> {
+            return resourceService.organizationGet(s.getCompanyId()).flatMap(c -> {
+                final Mono<List<Artifact>> monoArtifact =
+                        s.getArtifacts() == null ? Flux.<Artifact>empty().collectList()
+                                                 : artifactConverter.convert(Flux.fromIterable(s.getArtifacts())).collectList();
+                final Mono<List<Request>> monoRequest =
+                        s.getRequests() == null ? Flux.<Request>empty().collectList()
+                                                : requestConverter.convert(Flux.fromIterable(s.getRequests())).collectList();
+                return monoArtifact.flatMap(artifacts -> {
+                    return monoRequest.map(requests -> {
+                        return Task.builder().artifacts(artifacts).company(c).description(s.getDescription()).requests(requests).id(s.getId()).build();
+                    });
+                });
             });
-        });*/
-         return source.flatMap(s -> {
-             return resourceService.organizationGet(s.getCompanyId()).map(c -> {
-                 Flux<Artifact> ars = artifactConverter.convert(Flux.fromIterable(s.getArtifacts()));
-                 Flux<Request> rqs = ars.flatMap(a->requestConverter.convert(Flux.fromIterable(s.getRequests())));
-                 return null;
-              });
-         });
-
+        }).log();
     }
 
     @Override

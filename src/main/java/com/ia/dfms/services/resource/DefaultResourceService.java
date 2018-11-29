@@ -71,7 +71,7 @@ public class DefaultResourceService implements ResourceService {
 
     @Override
     public Mono<Task> taskAdd(Mono<Task> task) {
-        return task.doOnNext(t -> taskRepository.save(t));
+        return task.flatMap(t -> taskRepository.save(t));
     }
 
     @Override

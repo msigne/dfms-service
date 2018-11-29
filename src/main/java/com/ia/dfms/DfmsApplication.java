@@ -5,10 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
 
-import io.github.kaiso.relmongo.config.EnableRelationalMongo;
+import io.github.kaiso.relmongo.config.EnableRelMongo;
 
 @SpringBootApplication
-@EnableRelationalMongo
+@EnableRelMongo
 @EnableMongoAuditing
 @EnableReactiveMongoRepositories
 public class DfmsApplication {
