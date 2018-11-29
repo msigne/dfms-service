@@ -30,7 +30,6 @@ public class ResourceHandler {
         final Mono<ResourceDTO> dto = request.bodyToMono(ResourceDTO.class);
         final Mono<Resource> r = resourceService.resourceAdd(resourceConverter.convert(dto));
         return ServerResponse.ok().body(resourceConverter.reverse(r), ResourceDTO.class);
-
     }
 
     public Mono<ServerResponse> resourceGet(ServerRequest request) {
@@ -64,15 +63,16 @@ public class ResourceHandler {
     }
 
     public Mono<ServerResponse> organisationAdd(ServerRequest request) {
-        final Mono<Company> dto = request.bodyToMono(Company.class);
-        final Mono<Company> o = resourceService.organizationAdd(dto);
-        return ServerResponse.ok().body(o, Company.class);
+        return request.bodyToMono(Company.class)
+                .flatMap(c -> resourceService.organizationAdd(Mono.just(c)))
+                .flatMap(cn -> ServerResponse.ok().body(Mono.just(cn), Company.class));
     }
 
     public Mono<ServerResponse> organisationGet(ServerRequest request) {
         final String companyId = request.pathVariable("companyId");
-        final Mono<Company> o = resourceService.organizationGet(companyId);
-        return ServerResponse.ok().body(o, Company.class);
+        return companyId == null ? ServerResponse.badRequest().build()
+                                 : resourceService.organizationGet(companyId)
+                                 .flatMap(c -> ServerResponse.ok().body(Mono.just(c), Company.class));
     }
 
     public Mono<ServerResponse> organisationGetAll(ServerRequest request) {

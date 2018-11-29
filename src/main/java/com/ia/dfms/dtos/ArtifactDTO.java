@@ -1,5 +1,7 @@
 package com.ia.dfms.dtos;
 
+import org.springframework.util.Assert;
+
 import com.ia.dfms.documents.Artifact;
 
 import lombok.AllArgsConstructor;
@@ -18,6 +20,11 @@ public class ArtifactDTO {
     private String companyId;
 
     public static ArtifactDTOBuilder of(Artifact a) {
-        return ArtifactDTO.builder().description(a.getDescription()).id(a.getId()).companyId(a.getCompany().getId()).uri(a.getUri());
+        Assert.notNull(a.getCompany(), "Company is required");
+        return ArtifactDTO.builder()
+                .description(a.getDescription())
+                .id(a.getId())
+                .companyId(a.getCompany().getId())
+                .uri(a.getUri());
     }
 }

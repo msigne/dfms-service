@@ -7,7 +7,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.util.Assert;
 
+import com.ia.dfms.documents.Artifact;
 import com.ia.dfms.documents.Request;
 import com.ia.dfms.documents.RequestStatus;
 
@@ -35,10 +37,25 @@ public class RequestDTO {
     private Collection<ArtifactDTO> artifacts = Collections.emptyList();
 
     public static RequestDTOBuilder of(Request req) {
-
-        final Collection<RequestTrackingDTO> trdtos = req.getSteps().stream().map(r -> RequestTrackingDTO.of(r).build()).collect(Collectors.toList());
-        final Collection<ArtifactDTO> adtos = req.getArtifacts().stream().map(a -> ArtifactDTO.of(a).build()).collect(Collectors.toList());
-        return RequestDTO.builder().id(req.getId()).taskId(req.getTask().getId()).resourceId(req.getRequester().getId()).requestDate(req.getRequestDate())
-                .requestDetails(req.getRequestDetails()).requestStatus(req.getRequestStatus()).steps(trdtos).artifacts(adtos);
+        
+        Assert.notNull(req.getTask(), "The Task is required");
+        Assert.notNull(req.getRequester(), "The Requester is required");
+        
+        final Collection<Artifact> artifacts = req.getArtifacts();
+        final Collection<RequestTrackingDTO> trdtos = req.getSteps().stream()
+                .map(r -> RequestTrackingDTO.of(r).build())
+                .collect(Collectors.toList());
+        final Collection<ArtifactDTO> adtos = artifacts == null ? Collections.emptyList() : artifacts.stream()
+                                                                .map(a -> ArtifactDTO.of(a).build())
+                                                                .collect(Collectors.toList());
+        return RequestDTO.builder()
+                .id(req.getId())
+                .taskId(req.getTask().getId())
+                .resourceId(req.getRequester().getId())
+                .requestDate(req.getRequestDate())
+                .requestDetails(req.getRequestDetails())
+                .requestStatus(req.getRequestStatus())
+                .steps(trdtos)
+                .artifacts(adtos);
     }
 }

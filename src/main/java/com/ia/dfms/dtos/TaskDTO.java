@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.util.Assert;
 
 import com.ia.dfms.documents.Task;
 
@@ -28,9 +29,14 @@ public class TaskDTO {
     private String companyId;
 
     public static TaskDTOBuilder of(Task task) {
-        final Collection<RequestDTO> requests = task.getRequests().stream().map(r -> RequestDTO.of(r).build()).collect(Collectors.toList());
-        final Collection<ArtifactDTO> artifacts = task.getArtifacts().stream().map(a -> ArtifactDTO.of(a).build()).collect(Collectors.toList());
-        return TaskDTO.builder().id(task.getId()).companyId(task.getCompany().getId()).description(task.getDescription()).artifacts(artifacts)
+        Assert.notNull(task.getCompany(), "The company is required");
+        final Collection<RequestDTO> requests = task.getRequests() == null ? Collections.emptyList() : task.getRequests().stream().map(r -> RequestDTO.of(r).build()).collect(Collectors.toList());
+        final Collection<ArtifactDTO> artifacts = task.getArtifacts() == null ? Collections.emptyList() : task.getArtifacts().stream().map(a -> ArtifactDTO.of(a).build()).collect(Collectors.toList());
+        return TaskDTO.builder()
+                .id(task.getId())
+                .companyId(task.getCompany().getId())
+                .description(task.getDescription())
+                .artifacts(artifacts)
                 .requests(requests);
     }
 }

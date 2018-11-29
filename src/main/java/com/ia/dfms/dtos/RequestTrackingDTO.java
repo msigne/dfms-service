@@ -2,6 +2,8 @@ package com.ia.dfms.dtos;
 
 import java.time.LocalDateTime;
 
+import org.springframework.util.Assert;
+
 import com.ia.dfms.documents.RequestStatus;
 import com.ia.dfms.documents.RequestTracking;
 
@@ -23,7 +25,13 @@ public class RequestTrackingDTO {
     private RequestStatus requestStatus;
 
     public static RequestTrackingDTOBuilder of(RequestTracking r) {
-        return RequestTrackingDTO.builder().id(r.getId()).managerId(r.getManager().getId()).observation(r.getObservation())
-                .requestId(r.getRequest().getId()).requestStatus(r.getRequestStatus()).trackingTime(r.getTrackingTime());
+        Assert.notNull(r.getManager(), "Manager is required");
+        return RequestTrackingDTO.builder()
+                .id(r.getId())
+                .managerId(r.getManager().getId())
+                .observation(r.getObservation())
+                .requestId(r.getRequest().getId())
+                .requestStatus(r.getRequestStatus())
+                .trackingTime(r.getTrackingTime());
     }
 }

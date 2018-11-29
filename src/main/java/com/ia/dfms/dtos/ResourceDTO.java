@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.util.Assert;
+
 import com.ia.dfms.documents.RequestTracking;
 import com.ia.dfms.documents.Resource;
 
@@ -32,10 +34,19 @@ public class ResourceDTO {
     private String companyId;
 
     public static ResourceDTOBuilder of(Resource req) {
+        Assert.notNull(req.getCompany(), "The company is required");
         final Collection<RequestTracking> tr = req.getSteps();
         final Collection<RequestTrackingDTO> trdtos =
-                tr == null ? Collections.emptyList() : tr.stream().map(r -> RequestTrackingDTO.of(r).build()).collect(Collectors.toList());
-        return ResourceDTO.builder().id(req.getId()).description(req.getDescription()).details(req.getDetails()).email(req.getEmail())
-                .phoneNumber(req.getPhoneNumber()).steps(trdtos).companyId(req.getCompany().getId());
+                tr == null ? Collections.emptyList() : tr.stream()
+                           .map(r -> RequestTrackingDTO.of(r).build())
+                           .collect(Collectors.toList());
+        return ResourceDTO.builder()
+                .id(req.getId())
+                .description(req.getDescription())
+                .details(req.getDetails())
+                .email(req.getEmail())
+                .phoneNumber(req.getPhoneNumber())
+                .steps(trdtos)
+                .companyId(req.getCompany().getId());
     }
 }

@@ -40,7 +40,7 @@ public class TaskConverter implements Converter<TaskDTO, Task> {
                     });
                 });
             });
-        }).log();
+        });
     }
 
     @Override
