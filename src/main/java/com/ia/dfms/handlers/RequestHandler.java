@@ -21,7 +21,7 @@ public class RequestHandler {
 
     private final RequestService requestService;
     private final Converter<RequestDTO, Request> requestConverter;
-    private final Converter<RequestTracking, RequestTrackingDTO> historyConverter;
+    private final Converter<RequestTrackingDTO, RequestTracking> historyConverter;
 
     public Mono<ServerResponse> requestAdd(ServerRequest request) {
         final Mono<RequestDTO> dto = request.bodyToMono(RequestDTO.class);
@@ -38,13 +38,13 @@ public class RequestHandler {
 
     public Mono<ServerResponse> historyByRequest(ServerRequest request) {
         final String requestId = request.pathVariable("requestId");
-        final Flux<RequestTrackingDTO> dtos = historyConverter.convert(requestService.requestHistoryByRequest(requestId));
+        final Flux<RequestTrackingDTO> dtos = historyConverter.reverse(requestService.requestHistoryByRequest(requestId));
         return ServerResponse.ok().body(dtos, RequestTrackingDTO.class);
     }
 
     public Mono<ServerResponse> historyByResource(ServerRequest request) {
         final String resourceId = request.pathVariable("resourceId");
-        final Flux<RequestTrackingDTO> dtos = historyConverter.convert(requestService.requestHistoryByResource(resourceId));
+        final Flux<RequestTrackingDTO> dtos = historyConverter.reverse(requestService.requestHistoryByResource(resourceId));
         return ServerResponse.ok().body(dtos, RequestTrackingDTO.class);
     }
 }

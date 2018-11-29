@@ -1,8 +1,6 @@
 package com.ia.dfms.documents;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -29,6 +27,7 @@ import lombok.ToString;
 public class Request {
     @Id
     private String id;
+    @DBRef
     private Task task;
     @DBRef
     private Resource requester;
