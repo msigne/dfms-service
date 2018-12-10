@@ -7,6 +7,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.ia.dfms.events.creation.TaskCreatedEvent;
+import com.ia.dfms.events.update.TaskUpdatedEvent;
+
 import io.github.kaiso.relmongo.annotation.CascadeType;
 import io.github.kaiso.relmongo.annotation.JoinProperty;
 import io.github.kaiso.relmongo.annotation.OneToMany;
@@ -36,4 +39,21 @@ public class Task {
     private Collection<Artifact> artifacts = Collections.emptyList();
     @DBRef
     private Company company;
+    
+    public static TaskBuilder from(TaskCreatedEvent event) {
+        return Task.builder()
+                .artifacts(Artifact.from(event.getArtifacts()))
+                .company(Company.from(event.getCompany()).build())
+                .description(event.getDescription())
+                .id(event.getId());
+    }
+    
+    public static TaskBuilder from(TaskUpdatedEvent event) {
+        return Task.builder()
+                .artifacts(Artifact.fromUpdate(event.getArtifacts()))
+                .company(Company.from(event.getCompany()).build())
+                .description(event.getDescription())
+                .id(event.getId());
+    }
+
 }

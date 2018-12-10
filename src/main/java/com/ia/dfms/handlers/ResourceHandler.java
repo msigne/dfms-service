@@ -26,11 +26,6 @@ public class ResourceHandler {
     private final Converter<TaskDTO, Task> taskConverter;
     private final Converter<ArtifactDTO, Artifact> artifactConverter;
 
-    public Mono<ServerResponse> resourceAdd(ServerRequest request) {
-        final Mono<ResourceDTO> dto = request.bodyToMono(ResourceDTO.class);
-        final Mono<Resource> r = resourceService.resourceAdd(resourceConverter.convert(dto));
-        return ServerResponse.ok().body(resourceConverter.reverse(r), ResourceDTO.class);
-    }
 
     public Mono<ServerResponse> resourceGet(ServerRequest request) {
         final String resourceId = request.pathVariable("resourceId");
@@ -44,11 +39,6 @@ public class ResourceHandler {
         return ServerResponse.ok().body(dtos, ResourceDTO.class);
     }
 
-    public Mono<ServerResponse> artifactAdd(ServerRequest request) {
-        final Mono<ArtifactDTO> dto = request.bodyToMono(ArtifactDTO.class);
-        final Mono<Artifact> a = resourceService.artifactAdd(artifactConverter.convert(dto));
-        return ServerResponse.ok().body(artifactConverter.reverse(a), ArtifactDTO.class);
-    }
 
     public Mono<ServerResponse> artifactGet(ServerRequest request) {
         final String artifactId = request.pathVariable("artifactId");
@@ -62,11 +52,6 @@ public class ResourceHandler {
         return ServerResponse.ok().body(artifactConverter.reverse(dtos), ArtifactDTO.class);
     }
 
-    public Mono<ServerResponse> organisationAdd(ServerRequest request) {
-        return request.bodyToMono(Company.class)
-                .flatMap(c -> resourceService.organizationAdd(Mono.just(c)))
-                .flatMap(cn -> ServerResponse.ok().body(Mono.just(cn), Company.class));
-    }
 
     public Mono<ServerResponse> organisationGet(ServerRequest request) {
         final String companyId = request.pathVariable("companyId");
@@ -79,12 +64,6 @@ public class ResourceHandler {
         return ServerResponse.ok().body(resourceService.organizationGet(), Company.class);
     }
 
-    public Mono<ServerResponse> taskAdd(ServerRequest request) {
-        final Mono<TaskDTO> dto = request.bodyToMono(TaskDTO.class);
-        return taskConverter.convert(dto).map(task -> resourceService.taskAdd(Mono.just(task))).flatMap(r -> {
-            return ServerResponse.ok().body(taskConverter.reverse(r), TaskDTO.class);
-        });
-    }
 
     public Mono<ServerResponse> taskGet(ServerRequest request) {
         final String taskId = request.pathVariable("taskId");

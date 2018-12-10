@@ -11,7 +11,7 @@ import org.springframework.util.Assert;
 
 import com.ia.dfms.documents.Artifact;
 import com.ia.dfms.documents.Request;
-import com.ia.dfms.documents.RequestStatus;
+import com.ia.dfms.enums.RequestStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

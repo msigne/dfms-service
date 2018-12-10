@@ -3,9 +3,8 @@ package com.ia.dfms.dtos;
 import java.time.LocalDateTime;
 
 import org.springframework.util.Assert;
-
-import com.ia.dfms.documents.RequestStatus;
 import com.ia.dfms.documents.RequestTracking;
+import com.ia.dfms.enums.RequestStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

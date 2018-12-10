@@ -23,13 +23,6 @@ public class RequestHandler {
     private final Converter<RequestDTO, Request> requestConverter;
     private final Converter<RequestTrackingDTO, RequestTracking> historyConverter;
 
-    public Mono<ServerResponse> requestAdd(ServerRequest request) {
-        final Mono<RequestDTO> dto = request.bodyToMono(RequestDTO.class);
-        final Mono<Request> rq = requestConverter.convert(dto);
-        final Mono<Request> r = requestService.requestAdd(rq);
-        return ServerResponse.ok().body(requestConverter.reverse(r), RequestDTO.class);
-    }
-
     public Mono<ServerResponse> requestGet(ServerRequest request) {
         final String requestId = request.pathVariable("requestId");
         final Mono<Request> r = requestService.requestGet(requestId);
